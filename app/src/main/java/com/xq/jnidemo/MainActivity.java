@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import com.xq.jnidemo.ffmpeg.FFmpegActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -14,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, JniActivity.class);
+        Intent intent = new Intent(this, FFmpegActivity.class);
         startActivity(intent);
 
         verifyStoragePermissions(this);

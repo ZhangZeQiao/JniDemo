@@ -23,6 +23,7 @@
         <activity android:name=".JniActivity"/>
         <activity android:name=".file_encrypt.FileEncryptActivity"/>
         <activity android:name=".file_split_merge.FileSplitMergeActivity"/>
+        <activity android:name=".ffmpeg.FFmpegActivity"/>
     </application>
 
 </manifest>
