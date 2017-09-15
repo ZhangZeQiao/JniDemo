@@ -207,7 +207,7 @@ Java_com_xq_jnidemo_ffmpeg_VideoUtils_render(
 
     // 编码/压缩数据的初始化
     AVPacket *pPacket = (AVPacket *) av_malloc(sizeof(AVPacket)); // 一定要先手动分配内存
-    av_init_packet(pPacket);
+
     // 像素数据/解码数据
     AVFrame *yuvFrame = av_frame_alloc();
     AVFrame *rgbFrame = av_frame_alloc();
@@ -234,12 +234,12 @@ Java_com_xq_jnidemo_ffmpeg_VideoUtils_render(
                                              pCodecContext->width,
                                              pCodecContext->height,
                     // 用的格式要和 SurfaceHolder设置的一致
-                                             AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM);
+                                             AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM); // WINDOW_FORMAT_RGBA_8888
             ANativeWindow_lock(aNativeWindow, &outBuffer, NULL);
 
             // 设置 yuvFrame的属性（像素格式、宽高）和缓冲区
             // rgbFrame缓冲区与 outBuffer.bits是同一块内存
-            avpicture_fill((AVPicture *) yuvFrame,
+            avpicture_fill((AVPicture *) rgbFrame,
                            (const uint8_t *) outBuffer.bits, // 共用缓冲区
                            AV_PIX_FMT_RGBA,
                            pCodecContext->width, pCodecContext->height);
@@ -251,6 +251,8 @@ Java_com_xq_jnidemo_ffmpeg_VideoUtils_render(
             libyuv::I420ToABGR(yuvFrame->data[0], yuvFrame->linesize[0], // y的数据跟一行大小
                                yuvFrame->data[1], yuvFrame->linesize[1], // u的数据跟一行大小
                                yuvFrame->data[2], yuvFrame->linesize[2], // v的数据跟一行大小
+                    // yuvFrame->data[2], yuvFrame->linesize[2], // v的数据跟一行大小
+                    // yuvFrame->data[1], yuvFrame->linesize[1], // u的数据跟一行大小
                                rgbFrame->data[0], rgbFrame->linesize[0], // 指定 rgb
                                pCodecContext->width, pCodecContext->height); // 宽高
 
