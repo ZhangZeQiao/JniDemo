@@ -100,6 +100,13 @@ add_library(swscale-4
 set_target_properties(swscale-4
                       PROPERTIES IMPORTED_LOCATION
                       ${CMAKE_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/libswscale-4.so)
+# TODO libyuv是Google开源的实现各种YUV与RGB之间相互转换、旋转、缩放的库
+add_library(yuv
+            SHARED
+            IMPORTED)
+set_target_properties(yuv
+                      PROPERTIES IMPORTED_LOCATION
+                      ${CMAKE_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/libyuv.so)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -148,6 +155,14 @@ target_link_libraries( ffmpeg_decode_demo
 
 target_link_libraries( ffmpeg_player
 
+                       # TODO https://stackoverflow.com/questions/43926204/android-undefined-reference-with-ndk
+                       # TODO 解决  #include <android/native_window_jni.h> 时编译出现的错误
+                       # TODO error:Could not find class 'android.graphics.xxx
+                       -ljnigraphics
+                       # TODO error:undefined reference to `ANativeWindow_fromSurface' 等等等
+                       -landroid
+                       # lib_opencv # Error:error: linker command failed with exit code 1 (use -v to see invocation)
+
                        avcodec-57
                        avdevice-57
                        avfilter-6
@@ -156,4 +171,5 @@ target_link_libraries( ffmpeg_player
                        postproc-54
                        swresample-2
                        swscale-4
+                       yuv
                        ${log-lib} )

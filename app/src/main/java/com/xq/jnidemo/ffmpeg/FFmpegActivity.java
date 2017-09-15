@@ -1,5 +1,6 @@
 package com.xq.jnidemo.ffmpeg;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -33,9 +34,7 @@ public class FFmpegActivity extends AppCompatActivity {
     }
 
     public void onPlayer(View view) {
-        String input = new File(Environment.getExternalStorageDirectory(), "input.mp4").getAbsolutePath();
-        String output = new File(Environment.getExternalStorageDirectory(), "output_1280x800_yuv420p.yuv").getAbsolutePath();
-
-        VideoUtils.player(input, output);
+        Intent intent = new Intent(this, VideoPlayerActivity.class);
+        startActivity(intent);
     }
 }

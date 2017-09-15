@@ -1,5 +1,7 @@
 package com.xq.jnidemo.ffmpeg;
 
+import android.view.Surface;
+
 /**
  * @author 小侨
  * @time 2017/9/13  16:11
@@ -17,22 +19,15 @@ public class VideoUtils {
         System.loadLibrary("postproc-54");
         System.loadLibrary("avfilter-6");
         System.loadLibrary("avdevice-57");
+        System.loadLibrary("yuv");
         System.loadLibrary("ffmpeg_decode_demo");
         System.loadLibrary("ffmpeg_player");
-
-        /*System.loadLibrary("avutil-54");
-        System.loadLibrary("swresample-1");
-        System.loadLibrary("avcodec-56");
-        System.loadLibrary("avformat-56");
-        System.loadLibrary("swscale-3");
-        System.loadLibrary("postproc-53");
-        System.loadLibrary("avfilter-5");
-        System.loadLibrary("avdevice-56");
-        System.loadLibrary("myffmpeg");*/
     }
 
     public native static void decode(String input, String output);
 
     public native static void player(String input_jstr, String output_jstr);
+
+    public native static void render(String input_jstr, Surface surface);
 
 }
