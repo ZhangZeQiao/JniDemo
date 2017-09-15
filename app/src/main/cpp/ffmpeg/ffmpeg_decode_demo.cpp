@@ -4,11 +4,12 @@
 
 #include <jni.h>
 
-//#include "VideoUtil.h"
+#include "video_utils.h"
 
 #include <android/log.h>
-#define LOGI(FORMAT,...) __android_log_print(ANDROID_LOG_INFO,"jason",FORMAT,##__VA_ARGS__);
-#define LOGE(FORMAT,...) __android_log_print(ANDROID_LOG_ERROR,"jason",FORMAT,##__VA_ARGS__);
+
+#define LOGI(FORMAT, ...) __android_log_print(ANDROID_LOG_INFO,"xq",FORMAT,##__VA_ARGS__);
+#define LOGE(FORMAT, ...) __android_log_print(ANDROID_LOG_ERROR,"xq",FORMAT,##__VA_ARGS__);
 
 // TODO 直接这样会报：undefined reference to 'av_register_all()' 等等等
 ////编码
@@ -145,7 +146,8 @@ Java_com_xq_jnidemo_ffmpeg_VideoUtils_decode
                 //3 7输入、输出画面一行的数据的大小 AVFrame 转换是一行一行转换的
                 //4 输入数据第一列要转码的位置 从0开始
                 //5 输入画面的高度
-                sws_scale(sws_ctx, (const uint8_t *const *) pFrame->data, pFrame->linesize, 0, pCodecCtx->height,
+                sws_scale(sws_ctx, (const uint8_t *const *) pFrame->data, pFrame->linesize, 0,
+                          pCodecCtx->height,
                           pFrameYUV->data, pFrameYUV->linesize);
 
                 //输出到YUV文件

@@ -31,4 +31,11 @@ public class FFmpegActivity extends AppCompatActivity {
 
         VideoUtils.decode(input, output);
     }
+
+    public void onPlayer(View view) {
+        String input = new File(Environment.getExternalStorageDirectory(), "input.mp4").getAbsolutePath();
+        String output = new File(Environment.getExternalStorageDirectory(), "output_1280x800_yuv420p.yuv").getAbsolutePath();
+
+        VideoUtils.player(input, output);
+    }
 }

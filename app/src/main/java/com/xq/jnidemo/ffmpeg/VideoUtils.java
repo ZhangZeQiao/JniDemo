@@ -17,7 +17,8 @@ public class VideoUtils {
         System.loadLibrary("postproc-54");
         System.loadLibrary("avfilter-6");
         System.loadLibrary("avdevice-57");
-        System.loadLibrary("myffmpeg");
+        System.loadLibrary("ffmpeg_decode_demo");
+        System.loadLibrary("ffmpeg_player");
 
         /*System.loadLibrary("avutil-54");
         System.loadLibrary("swresample-1");
@@ -31,5 +32,7 @@ public class VideoUtils {
     }
 
     public native static void decode(String input, String output);
+
+    public native static void player(String input_jstr, String output_jstr);
 
 }

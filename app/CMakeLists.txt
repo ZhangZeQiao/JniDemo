@@ -29,11 +29,15 @@ add_library( file-split-merge
              SHARED
              src/main/cpp/file-split-merge.cpp )
 
-add_library( myffmpeg
+# TODO FFmpeg
+add_library( ffmpeg_decode_demo
              SHARED
 # TODO src/main/cpp/ffmpeg/ffmpeg.cpp ) -->  java.lang.UnsatisfiedLinkError: Native method not found
 # TODO cpp文件不能跟文件夹重名，不然 System.loadLibrary()找不到
-             src/main/cpp/ffmpeg/myffmpeg.cpp )
+             src/main/cpp/ffmpeg/ffmpeg_decode_demo.cpp )
+add_library( ffmpeg_player
+             SHARED
+             src/main/cpp/ffmpeg/ffmpeg_player.cpp )
 # TODO 配置加载 native依赖
 # TODO include_directories( src/main/jniLibs/${ANDROID_ABI}/include )
 # TODO 路径指向上面会编译出错，指向下面的路径就没问题
@@ -130,7 +134,19 @@ target_link_libraries( file-split-merge
                        ${log-lib} )
 
 # TODO 将目标库与 NDK中的库 及 用到的第三方库进行连接
-target_link_libraries( myffmpeg
+target_link_libraries( ffmpeg_decode_demo
+
+                       avcodec-57
+                       avdevice-57
+                       avfilter-6
+                       avformat-57
+                       avutil-55
+                       postproc-54
+                       swresample-2
+                       swscale-4
+                       ${log-lib} )
+
+target_link_libraries( ffmpeg_player
 
                        avcodec-57
                        avdevice-57
