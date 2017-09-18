@@ -33,8 +33,16 @@ public class FFmpegActivity extends AppCompatActivity {
         VideoUtils.decode(input, output);
     }
 
-    public void onPlayer(View view) {
+    public void onVideo(View view) {
         Intent intent = new Intent(this, VideoPlayerActivity.class);
         startActivity(intent);
+    }
+
+    public void onSound(View view) {
+        String input = new File(Environment.getExternalStorageDirectory(),
+                "麦わらの一味 - ビンクスの酒 (BONUS TRACK).mp3").getAbsolutePath();
+        String output = new File(Environment.getExternalStorageDirectory(),
+                "麦わらの一味 - ビンクスの酒 (BONUS TRACK).pcm").getAbsolutePath();
+        VideoUtils.sound(input, output);
     }
 }

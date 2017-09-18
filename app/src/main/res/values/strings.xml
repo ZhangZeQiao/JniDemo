@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">JniDemo</string>
+    <string-array name="video_array">
+        <item>input.mp4</item>
+        <item>Titanic.mkv</item>
+        <item>World2.wmv</item>
+        <item>Warcraft3_end.avi</item>
+    </string-array>
 </resources>

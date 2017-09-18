@@ -14,7 +14,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="player"
-        android:onClick="onPlayer"/>
+        android:text="video"
+        android:onClick="onVideo"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="sound"
+        android:onClick="onSound"/>
 
 </LinearLayout>

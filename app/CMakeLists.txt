@@ -35,9 +35,12 @@ add_library( ffmpeg_decode_demo
 # TODO src/main/cpp/ffmpeg/ffmpeg.cpp ) -->  java.lang.UnsatisfiedLinkError: Native method not found
 # TODO cpp文件不能跟文件夹重名，不然 System.loadLibrary()找不到
              src/main/cpp/ffmpeg/ffmpeg_decode_demo.cpp )
-add_library( ffmpeg_player
+add_library( ffmpeg_video_player
              SHARED
-             src/main/cpp/ffmpeg/ffmpeg_player.cpp )
+             src/main/cpp/ffmpeg/ffmpeg_video_player.cpp )
+add_library( ffmpeg_audio_player
+             SHARED
+             src/main/cpp/ffmpeg/ffmpeg_audio_player.cpp )
 # TODO 配置加载 native依赖
 # TODO include_directories( src/main/jniLibs/${ANDROID_ABI}/include )
 # TODO 路径指向上面会编译出错，指向下面的路径就没问题
@@ -153,7 +156,7 @@ target_link_libraries( ffmpeg_decode_demo
                        swscale-4
                        ${log-lib} )
 
-target_link_libraries( ffmpeg_player
+target_link_libraries( ffmpeg_video_player
 
                        # TODO https://stackoverflow.com/questions/43926204/android-undefined-reference-with-ndk
                        # TODO 解决  #include <android/native_window_jni.h> 时编译出现的错误
@@ -172,4 +175,16 @@ target_link_libraries( ffmpeg_player
                        swresample-2
                        swscale-4
                        yuv
+                       ${log-lib} )
+
+target_link_libraries( ffmpeg_audio_player
+
+                       avcodec-57
+                       avdevice-57
+                       avfilter-6
+                       avformat-57
+                       avutil-55
+                       postproc-54
+                       swresample-2
+                       swscale-4
                        ${log-lib} )
