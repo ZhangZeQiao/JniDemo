@@ -38,11 +38,21 @@ public class FFmpegActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onSound(View view) {
+    public void onSoundDecode(View view) {
         String input = new File(Environment.getExternalStorageDirectory(),
                 "麦わらの一味 - ビンクスの酒 (BONUS TRACK).mp3").getAbsolutePath();
         String output = new File(Environment.getExternalStorageDirectory(),
                 "麦わらの一味 - ビンクスの酒 (BONUS TRACK).pcm").getAbsolutePath();
-        VideoUtils.sound(input, output);
+        VideoUtils.soundDecode(input, output);
+    }
+
+    public void onSoundPlay(View view) {
+        //         String input = new File(Environment.getExternalStorageDirectory(),
+        //         "麦わらの一味 - ビンクスの酒 (BONUS TRACK).mp3").getAbsolutePath();
+        String input = new File(Environment.getExternalStorageDirectory(),
+                "input.mp4").getAbsolutePath();
+        String output = new File(Environment.getExternalStorageDirectory(),
+                "麦わらの一味 - ビンクスの酒 (BONUS TRACK).pcm").getAbsolutePath();
+        VideoUtils.soundPlay(input, output);
     }
 }

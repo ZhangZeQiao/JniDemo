@@ -30,11 +30,11 @@ public class VideoUtils {
 
     public native static void decode(String input, String output);
 
-    public native static void player(String input_jstr, String output_jstr);
+    public native static void playerDecode(String input_jstr, String output_jstr);
 
     public native static void render(String input_jstr, Surface surface);
 
-    public native static void sound(String input_jstr, String output_jstr);
+    public native static void soundDecode(String input_jstr, String output_jstr);
 
     // 喇叭只支持PCM格式，播放的音频文件最终都要解码成PCM格式才能播放
     // 手机自带播发器不一定能解码所有的音频文件，一般只支持常用的音频文件（MP3等）
@@ -44,12 +44,23 @@ public class VideoUtils {
 
     /**
      * 创建一个AudioTrac对象，用于播放声音
+     *
+     * @param nb_channels 声道个数
+     * @return
      */
-    public static AudioTrack createAudioTrack() {
-        int sampleRateInHz = 44100;
+    public static AudioTrack createAudioTrack(int sample_rate, int nb_channels) {
+        // 固定格式的音频码流
+        int sampleRateInHz = sample_rate;
         int audioFormat = AudioFormat.ENCODING_PCM_16BIT;
         //声道布局
-        int channelConfig = android.media.AudioFormat.CHANNEL_OUT_STEREO; // 立体声
+        int channelConfig;
+        if (nb_channels == 1) {
+            channelConfig = AudioFormat.CHANNEL_OUT_MONO;
+        } else if (nb_channels == 2) {
+            channelConfig = AudioFormat.CHANNEL_OUT_STEREO; // 立体声
+        } else {
+            channelConfig = AudioFormat.CHANNEL_OUT_STEREO; // 立体声
+        }
 
         int bufferSizeInBytes = AudioTrack.getMinBufferSize(sampleRateInHz, channelConfig, audioFormat);
         AudioTrack audioTrack = new AudioTrack(
@@ -67,4 +78,6 @@ public class VideoUtils {
 
         return audioTrack;
     }
+
+    public native static void soundPlay(String input_jstr, String output_jstr);
 }

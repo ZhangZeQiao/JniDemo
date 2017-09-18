@@ -20,7 +20,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="sound"
-        android:onClick="onSound"/>
+        android:text="sound_decode"
+        android:onClick="onSoundDecode"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="sound_play"
+        android:onClick="onSoundPlay"/>
 
 </LinearLayout>

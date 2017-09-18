@@ -22,7 +22,7 @@ extern "C" {
 // player练习代码
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_xq_jnidemo_ffmpeg_VideoUtils_player
+Java_com_xq_jnidemo_ffmpeg_VideoUtils_playerDecode
         (JNIEnv *env, jclass type, jstring input_jstr, jstring output_jstr) {
     const char *input_cstr = env->GetStringUTFChars(input_jstr, 0);
     const char *output_cstr = env->GetStringUTFChars(output_jstr, 0);
@@ -221,47 +221,51 @@ Java_com_xq_jnidemo_ffmpeg_VideoUtils_render(
     // 6、一帧一帧读取压缩的视频数据 AVPacket
     int len, got_picture_ptr, framecount = 0;
     while (av_read_frame(pFormatCtx, pPacket) >= 0) {
-        // 解码AVPacket->AVFrame
-        len = avcodec_decode_video2(pCodecContext, yuvFrame, &got_picture_ptr, pPacket);
-        // @param[in,out] got_picture_ptr Zero if no frame could be decompressed, otherwise, it is nonzero.
-        // 0代表解码完成，非0代表正在解码
-        if (got_picture_ptr) {
-            LOGI("解码%d帧", framecount++);
+        // TODO 解码视频类型的 Packet
+        if (pPacket->stream_index == video_stream_idx) {
 
-            // lock 锁定
-            // 设置缓冲区的属性（宽、高、像素格式）
-            ANativeWindow_setBuffersGeometry(aNativeWindow,
-                                             pCodecContext->width,
-                                             pCodecContext->height,
-                    // 用的格式要和 SurfaceHolder设置的一致
-                                             AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM); // WINDOW_FORMAT_RGBA_8888
-            ANativeWindow_lock(aNativeWindow, &outBuffer, NULL);
+            // 解码AVPacket->AVFrame
+            len = avcodec_decode_video2(pCodecContext, yuvFrame, &got_picture_ptr, pPacket);
+            // @param[in,out] got_picture_ptr Zero if no frame could be decompressed, otherwise, it is nonzero.
+            // 0代表解码完成，非0代表正在解码
+            if (got_picture_ptr) {
+                LOGI("解码%d帧", framecount++);
 
-            // 设置 yuvFrame的属性（像素格式、宽高）和缓冲区
-            // rgbFrame缓冲区与 outBuffer.bits是同一块内存
-            avpicture_fill((AVPicture *) rgbFrame,
-                           (const uint8_t *) outBuffer.bits, // 共用缓冲区
-                           AV_PIX_FMT_RGBA,
-                           pCodecContext->width, pCodecContext->height);
+                // lock 锁定
+                // 设置缓冲区的属性（宽、高、像素格式）
+                ANativeWindow_setBuffersGeometry(aNativeWindow,
+                                                 pCodecContext->width,
+                                                 pCodecContext->height,
+                        // 用的格式要和 SurfaceHolder设置的一致
+                                                 AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM); // WINDOW_FORMAT_RGBA_8888
+                ANativeWindow_lock(aNativeWindow, &outBuffer, NULL);
 
-            // YUV->RGBA_8888
-            // TODO 直接 I420ToARGB 找不到，用下面的方法就能找到，是不是很机智 ...
-            // TODO 可能是 C中能找到，C++要用下面的方法才能找到
-            // TODO 查看源码 namespace libyuv {}
-            libyuv::I420ToABGR(yuvFrame->data[0], yuvFrame->linesize[0], // y的数据跟一行大小
-                               yuvFrame->data[1], yuvFrame->linesize[1], // u的数据跟一行大小
-                               yuvFrame->data[2], yuvFrame->linesize[2], // v的数据跟一行大小
-                    // yuvFrame->data[2], yuvFrame->linesize[2], // v的数据跟一行大小
-                    // yuvFrame->data[1], yuvFrame->linesize[1], // u的数据跟一行大小
-                               rgbFrame->data[0], rgbFrame->linesize[0], // 指定 rgb
-                               pCodecContext->width, pCodecContext->height); // 宽高
+                // 设置 yuvFrame的属性（像素格式、宽高）和缓冲区
+                // rgbFrame缓冲区与 outBuffer.bits是同一块内存
+                avpicture_fill((AVPicture *) rgbFrame,
+                               (const uint8_t *) outBuffer.bits, // 共用缓冲区
+                               AV_PIX_FMT_RGBA,
+                               pCodecContext->width, pCodecContext->height);
 
-            // unlock 解锁
-            ANativeWindow_unlockAndPost(aNativeWindow);
+                // YUV->RGBA_8888
+                // TODO 直接 I420ToARGB 找不到，用下面的方法就能找到，是不是很机智 ...
+                // TODO 可能是 C中能找到，C++要用下面的方法才能找到
+                // TODO 查看源码 namespace libyuv {}
+                libyuv::I420ToABGR(yuvFrame->data[0], yuvFrame->linesize[0], // y的数据跟一行大小
+                                   yuvFrame->data[1], yuvFrame->linesize[1], // u的数据跟一行大小
+                                   yuvFrame->data[2], yuvFrame->linesize[2], // v的数据跟一行大小
+                        // yuvFrame->data[2], yuvFrame->linesize[2], // v的数据跟一行大小
+                        // yuvFrame->data[1], yuvFrame->linesize[1], // u的数据跟一行大小
+                                   rgbFrame->data[0], rgbFrame->linesize[0], // 指定 rgb
+                                   pCodecContext->width, pCodecContext->height); // 宽高
 
-            // TODO 不断解码不断绘制，频率太高，休眠一下
-            // TODO 不然会报错：Fatal signal 11 (SIGSEGV),code 1,fault addr 0x0 in tid
-            usleep(1000 * 16);
+                // unlock 解锁
+                ANativeWindow_unlockAndPost(aNativeWindow);
+
+                // TODO 不断解码不断绘制，频率太高，休眠一下
+                // TODO 不然会报错：Fatal signal 11 (SIGSEGV),code 1,fault addr 0x0 in tid
+                usleep(1000 * 16);
+            }
         }
         // 释放资源
         av_free_packet(pPacket);

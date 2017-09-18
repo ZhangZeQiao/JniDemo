@@ -48,10 +48,10 @@ public class VideoPlayerActivity extends AppCompatActivity {
     /**
      * FFmpeg解码练习的调用代码
      */
-    private void player() {
+    private void playerDecode() {
         String input = new File(Environment.getExternalStorageDirectory(), "input.mp4").getAbsolutePath();
         String output = new File(Environment.getExternalStorageDirectory(), "output_1280x800_yuv420p.yuv").getAbsolutePath();
-        VideoUtils.player(input, output);
+        VideoUtils.playerDecode(input, output);
     }
 
     public void onPlay(View view) {

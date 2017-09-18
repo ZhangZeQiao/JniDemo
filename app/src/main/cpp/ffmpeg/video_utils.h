@@ -15,13 +15,17 @@ JNIEXPORT void JNICALL
 Java_com_xq_jnidemo_ffmpeg_VideoUtils_decode(JNIEnv *, jclass, jstring, jstring);
 
 JNIEXPORT void JNICALL
-Java_com_xq_jnidemo_ffmpeg_VideoUtils_player(JNIEnv *, jclass, jstring, jstring);
+Java_com_xq_jnidemo_ffmpeg_VideoUtils_playerDecode(JNIEnv *, jclass, jstring, jstring);
 
 JNIEXPORT void JNICALL
 Java_com_xq_jnidemo_ffmpeg_VideoUtils_render(JNIEnv *, jclass, jstring, jobject);
 
 JNIEXPORT void JNICALL
-Java_com_xq_jnidemo_ffmpeg_VideoUtils_sound(JNIEnv *, jclass, jstring, jstring);
+Java_com_xq_jnidemo_ffmpeg_VideoUtils_soundDecode(JNIEnv *, jclass, jstring, jstring);
+
+JNIEXPORT void JNICALL
+Java_com_xq_jnidemo_ffmpeg_VideoUtils_soundPlay(JNIEnv *, jclass, jstring, jstring);
+
 
 #ifdef __cplusplus
 }
