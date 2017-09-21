@@ -29,6 +29,10 @@ add_library( file-split-merge
              SHARED
              src/main/cpp/file-split-merge.cpp )
 
+add_library( posix_thread
+             SHARED
+             src/main/cpp/posix_thread.cpp )
+
 # TODO FFmpeg
 add_library( ffmpeg_decode_demo
              SHARED
@@ -141,6 +145,10 @@ target_link_libraries( file-encrypt
                        ${log-lib} )
 
 target_link_libraries( file-split-merge
+                       ${log-lib} )
+
+
+target_link_libraries( posix_thread
                        ${log-lib} )
 
 # TODO 将目标库与 NDK中的库 及 用到的第三方库进行连接

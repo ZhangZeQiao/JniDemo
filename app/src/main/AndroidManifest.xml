@@ -26,6 +26,7 @@
         <activity android:name=".file_split_merge.FileSplitMergeActivity"/>
         <activity android:name=".ffmpeg.FFmpegActivity"/>
         <activity android:name=".ffmpeg.VideoPlayerActivity"/>
+        <activity android:name=".posix_thread.POSIXThreadActivity"/>
     </application>
 
 </manifest>

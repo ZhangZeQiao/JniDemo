@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.xq.jnidemo.ffmpeg.FFmpegActivity;
+import com.xq.jnidemo.posix_thread.POSIXThreadActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, FFmpegActivity.class);
+        Intent intent = new Intent(this, POSIXThreadActivity.class);
         startActivity(intent);
 
         verifyStoragePermissions(this);
