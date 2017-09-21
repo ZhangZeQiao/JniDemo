@@ -26,6 +26,8 @@ Java_com_xq_jnidemo_ffmpeg_VideoUtils_soundDecode(JNIEnv *, jclass, jstring, jst
 JNIEXPORT void JNICALL
 Java_com_xq_jnidemo_ffmpeg_VideoUtils_soundPlay(JNIEnv *, jclass, jstring, jstring);
 
+JNIEXPORT void JNICALL
+Java_com_xq_jnidemo_ffmpeg_VideoUtils_play(JNIEnv *, jclass, jstring, jobject);
 
 #ifdef __cplusplus
 }

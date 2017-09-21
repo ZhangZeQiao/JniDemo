@@ -80,4 +80,7 @@ public class VideoUtils {
     }
 
     public native static void soundPlay(String input_jstr, String output_jstr);
+
+    // 音视频同步播放
+    public native static void play(String input_jstr, Surface surface);
 }

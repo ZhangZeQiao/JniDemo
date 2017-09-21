@@ -25,7 +25,6 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private VideoView mVideoView;
     private Spinner mSpVideo;
 
-
     private void initView() {
         mVideoView = (VideoView) findViewById(R.id.video_view);
         mSpVideo = (Spinner) findViewById(R.id.sp_video);
@@ -35,7 +34,6 @@ public class VideoPlayerActivity extends AppCompatActivity {
                 this, android.R.layout.simple_list_item_1, android.R.id.text1, videoArray);
         mSpVideo.setAdapter(adapter);
     }
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,26 +52,26 @@ public class VideoPlayerActivity extends AppCompatActivity {
         VideoUtils.playerDecode(input, output);
     }
 
-    public void onPlay(View view) {
-
+    /**
+     * FFmpeg播放视频画面【没有音频】
+     */
+    private void playerWithoutSound() {
         String input = new File(Environment.getExternalStorageDirectory(), mSpVideo.getSelectedItem().toString()).getAbsolutePath();
-        Log.v("xq",input);
+        Log.v("xq", input);
         // surface 传入到 Native函数中，用于绘制
         Surface surface = mVideoView.getHolder().getSurface();
         VideoUtils.render(input, surface);
+    }
 
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String input = new File(Environment.getExternalStorageDirectory(), "input.mp4").getAbsolutePath();
-                    // surface 传入到 Native函数中，用于绘制
-                    Surface surface = mVideoView.getHolder().getSurface();
-                    VideoUtils.render(input, surface);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();*/
+    /**
+     * 音视频同步播放
+     *
+     * @param view
+     */
+    public void onPlay(View view) {
+        String input = new File(Environment.getExternalStorageDirectory(), mSpVideo.getSelectedItem().toString()).getAbsolutePath();
+        // surface 传入到 Native函数中，用于绘制
+        Surface surface = mVideoView.getHolder().getSurface();
+        VideoUtils.play(input, surface);
     }
 }

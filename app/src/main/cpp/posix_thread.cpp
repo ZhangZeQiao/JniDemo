@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
+// TODO 这个要放最前面才有用
 // TODO 解决 pthread_create “too many arguments, expected 1”
 // TODO https://stackoverflow.com/questions/44463834/android-jni-pthread-create-too-many-arguments-expected-1
 #ifndef _Nonnull
