@@ -26,6 +26,7 @@ public class VideoUtils {
         System.loadLibrary("ffmpeg_decode_demo");
         System.loadLibrary("ffmpeg_video_player");
         System.loadLibrary("ffmpeg_audio_player");
+        System.loadLibrary("ffmpeg_player");
     }
 
     public native static void decode(String input, String output);

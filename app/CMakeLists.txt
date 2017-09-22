@@ -45,6 +45,12 @@ add_library( ffmpeg_video_player
 add_library( ffmpeg_audio_player
              SHARED
              src/main/cpp/ffmpeg/ffmpeg_audio_player.cpp )
+add_library( ffmpeg_player
+             SHARED
+             src/main/cpp/ffmpeg/ffmpeg_player.cpp )
+add_library( queue
+             SHARED
+             src/main/cpp/ffmpeg/queue.c )
 # TODO 配置加载 native依赖
 # TODO include_directories( src/main/jniLibs/${ANDROID_ABI}/include )
 # TODO 路径指向上面会编译出错，指向下面的路径就没问题
@@ -195,4 +201,23 @@ target_link_libraries( ffmpeg_audio_player
                        postproc-54
                        swresample-2
                        swscale-4
+                       ${log-lib} )
+
+target_link_libraries( ffmpeg_player
+
+                       -ljnigraphics
+                       -landroid
+
+                       avcodec-57
+                       avdevice-57
+                       avfilter-6
+                       avformat-57
+                       avutil-55
+                       postproc-54
+                       swresample-2
+                       swscale-4
+                       yuv
+                       ${log-lib} )
+
+target_link_libraries( queue
                        ${log-lib} )
