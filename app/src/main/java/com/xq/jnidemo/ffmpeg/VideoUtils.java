@@ -36,11 +36,34 @@ public class VideoUtils {
 
     public native static void soundDecode(String input_jstr, String output_jstr);
 
+    public native static void soundPlay(String input_jstr, String output_jstr);
+
+    // 音视频同步播放
+    public native static void play(String input_jstr, Surface surface);
+
     // 喇叭只支持PCM格式，播放的音频文件最终都要解码成PCM格式才能播放
     // 手机自带播发器不一定能解码所有的音频文件，一般只支持常用的音频文件（MP3等）
     // 但是FFmpeg几乎支持所有音频文件（视频文件）的解码，这就是用FFmpeg的原因
 
-    // Android中两种播放音频的方式：AudioTrack、OpenSL
+    // TODO Android中两种播放音频的方式：AudioTrack、OpenSL
+
+    /**
+     *      OpenSL ES（Open Sound Library embedded system）
+     *
+     *      Eclipse 应用：
+     *      $(call import-module, transcode-1.1.7/avilib) 配置
+     *      1.C/C++ build->Environment
+     *      添加环境变量：
+     *      名称：NDK_MODULE_PATH
+     *      路径：E:\dongnao\openclass\ndk-wav\
+     *
+     *      Object create
+     *      Interface getInterface
+     *
+     *      transcode 解码wav音频文件，解码得到音频数据给OpenSL播放
+     *
+     *      TODO AudioTrack虽然运行比 OpenSL ES慢，但是代码简单，一句调用，OpenSL ES要一百多行
+     */
 
     /**
      * 创建一个AudioTrac对象，用于播放声音
@@ -78,9 +101,4 @@ public class VideoUtils {
 
         return audioTrack;
     }
-
-    public native static void soundPlay(String input_jstr, String output_jstr);
-
-    // 音视频同步播放
-    public native static void play(String input_jstr, Surface surface);
 }
