@@ -1,13 +1,17 @@
+#include "queue.h"
 #include <stdlib.h>
 
-typedef struct _Queue Queue;
-
-//释放队列中元素所占用的内存
-typedef void* (*queue_free_func)(void* elem);
-
 /**
+ * TODO 笔记
+ *
+ * 2个队列：
+ *        音频AVPacket Queue
+ *        视频AVPacket Queue
+ *
  * 队列，这里主要用于存放AVPacket的指针
  * 这里，使用生产者消费模式来使用队列，至少需要2个队列实例，分别用来存储音频AVPacket和视频AVPacket
+ *
+ * 3个线程，一个生产者线程，2个消费者线程：
  *  1.生产者：read_stream线程负责不断的读取视频文件中AVPacket，分别放入两个队列中
  *	2.消费者：
  *			1）视频解码，从视频AVPacket Queue中获取元素，解码，绘制
@@ -31,16 +35,17 @@ struct _Queue {
 /**
  * 初始化队列
  */
-Queue *queue_init(int size) {
+Queue *queue_init(int size, queue_fill_func fill_func) {
     Queue *queue = (Queue *) malloc(sizeof(Queue));
     queue->size = size;
     queue->next_to_write = 0;
     queue->next_to_read = 0;
     //数组开辟空间
-    queue->tab = malloc(sizeof(*queue->tab) * size);
+    // TODO  error: assigning to 'void **' from incompatible type 'void *'
+    queue->tab = (void **) malloc(sizeof(*queue->tab) * size);
     int i;
     for (i = 0; i < size; i++) {
-        queue->tab[i] = malloc(sizeof(*queue->tab));
+        queue->tab[i] = fill_func();
     }
     return queue;
 }
@@ -66,19 +71,21 @@ int queue_get_next(Queue *queue, int current) {
 }
 
 /**
- * 队列压人元素
+ * 队列压人元素（生产）
  */
 void *queue_push(Queue *queue) {
     int current = queue->next_to_write;
     queue->next_to_write = queue_get_next(queue, current);
+    LOGI("queue_push queue:%#x, %d", queue, current);
     return queue->tab[current];
 }
 
 /**
- * 弹出元素
+ * 弹出元素（消费）
  */
 void *queue_pop(Queue *queue) {
     int current = queue->next_to_read;
     queue->next_to_read = queue_get_next(queue, current);
+    LOGI("queue_pop queue:%#x, %d", queue, current);
     return queue->tab[current];
 }
