@@ -1,5 +1,6 @@
 #include "queue.h"
 #include <stdlib.h>
+#include <pthread.h>
 
 /**
  * TODO 笔记
@@ -73,19 +74,39 @@ int queue_get_next(Queue *queue, int current) {
 /**
  * 队列压人元素（生产）
  */
-void *queue_push(Queue *queue) {
+void *queue_push(Queue *queue, pthread_mutex_t *mutex, pthread_cond_t *cond) {
     int current = queue->next_to_write;
-    queue->next_to_write = queue_get_next(queue, current);
+    int next_to_write;
+    for (;;) {
+        // 下一个要读的位置等于下一个要写的，等我写完，再读
+        // 不等于，就继续
+        next_to_write = queue_get_next(queue, current);
+        if (next_to_write != queue->next_to_read) {
+            break;
+        }
+        // 阻塞
+        pthread_cond_wait(cond, mutex);
+    }
+    queue->next_to_write = next_to_write;
     LOGI("queue_push queue:%#x, %d", queue, current);
+    // 通知
+    pthread_cond_broadcast(cond);
     return queue->tab[current];
 }
 
 /**
  * 弹出元素（消费）
  */
-void *queue_pop(Queue *queue) {
+void *queue_pop(Queue *queue, pthread_mutex_t *mutex, pthread_cond_t *cond) {
     int current = queue->next_to_read;
+    for (;;) {
+        if (queue->next_to_read != queue->next_to_write) {
+            break;
+        }
+        pthread_cond_wait(cond, mutex);
+    }
     queue->next_to_read = queue_get_next(queue, current);
     LOGI("queue_pop queue:%#x, %d", queue, current);
+    pthread_cond_broadcast(cond);
     return queue->tab[current];
 }
